@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop.xsd
+            http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+            http://www.springframework.org/schema/jdbc
+            http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations" value="classpath:datos.properties"/>
+	</bean>
+
+	<bean id="ejemploGeneral" class="edu.cusrso.java.spring.EjemploGeneral" lazy-init="true" init-method="initOK" destroy-method="meEstanMatando" >
+	
+		<!-- <property name="saludos" value="Hola a todos....." />  -->
+		<property name="saludos" value="${texto.saludo}" />
+
+		<property name="listaStrings">
+			<list>
+				<value>Juan</value>
+				<value>Pedro</value>
+				<value>Maria</value>
+			</list>
+		</property>
+		<property name="mapDeIntegers">
+			<map>
+				<entry key="123" value="Juan" />
+				<entry key="456" value="Pedro" />
+				<entry key="789" value="Maria" />
+			</map>
+		</property>
+		
+		<property name="setClientes">
+			<set>
+				<bean class="edu.cusrso.java.spring.Cliente">
+					<property name="id" value="12345" />
+					<property name="nombre" value="Juan Perez" />
+				</bean>
+				<ref bean="cliente" />
+			</set>
+		</property>
+
+	</bean>
+
+
+	<bean id="cliente" class="edu.cusrso.java.spring.Cliente" scope="prototype">
+	</bean>
+
+	<!-- <bean id="gestorPedidos" class="edu.cusrso.java.spring.GestorDePedidos" 
+		scope="prototype"> -->
+
+	
+	<bean id="gestorDePedidos" class="edu.cusrso.java.spring.GestorDePedidos">
+		<property name="cantidadDePedidos" value="35" />
+		<property name="pedido">
+			<bean factory-bean="controladorGeneralDePedidos"  factory-method="crearPedido">
+    			<constructor-arg value="tipoTest"/>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="controladorGeneralDePedidos" class="edu.cusrso.java.spring.ControladorGeneralDePedidos">
+		<!-- <property name="gestorDePedidos" ref="gestorDePedidos" /> -->
+	</bean>
+	
+
+
+	<!-- <bean id="gestorDeClientes" class="edu.cusrso.java.spring.GestorDeClientesHibernate"> -->
+
+	<!-- 
+	<bean id="gestorDeClientes" class="edu.cusrso.java.spring.GestorDeClientesHibernate">
+	</bean>
+	 -->
+
+ 	
+
+
+</beans>
